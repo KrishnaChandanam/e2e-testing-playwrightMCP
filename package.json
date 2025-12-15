@@ -1,0 +1,25 @@
+{
+  "name": "intersport-automation-test",
+  "version": "1.0.0",
+  "description": "Playwright test automation for Intersport shopping workflow",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:headed": "playwright test --headed",
+    "report": "playwright show-report"
+  },
+  "keywords": [
+    "playwright",
+    "testing",
+    "automation",
+    "intersport"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^25.0.2",
+    "typescript": "^5.9.3"
+  }
+}
