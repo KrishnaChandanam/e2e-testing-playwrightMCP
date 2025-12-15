@@ -29,8 +29,7 @@ pipeline {
                 echo '========== Running Playwright tests in container =========='
                 sh '''
                     docker run --rm \
-                        -v ${WORKSPACE}/test-results:/app/test-results \
-                        -v ${WORKSPACE}/playwright-report:/app/playwright-report \
+                        -v ${WORKSPACE}:/workspace \
                         -e CI=true \
                         intersport-tests:latest
                 '''
