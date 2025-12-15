@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins-local
+    ports:
+      - "8080:8080"       # Jenkins UI
+      - "50000:50000"     # Jenkins Agent communication
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock  # Access Docker from Jenkins
+    environment:
+      - JENKINS_OPTS=--argumentsRealm.passwd.admin=admin --argumentsRealm.roles.admin=admin
+    networks:
+      - jenkins-network
+
+  # Optional: Docker-in-Docker service for Jenkins to build containers
+  docker:
+    image: docker:dind
+    container_name: docker-service
+    privileged: true
+    networks:
+      - jenkins-network
+
+volumes:
+  jenkins_home:
+
+networks:
+  jenkins-network:
+    driver: bridge
