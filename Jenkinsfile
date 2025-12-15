@@ -11,32 +11,29 @@ pipeline {
         stage('Checkout') {
             steps {
                 echo '========== Checking out code =========='
-                checkout scm
+                deleteDir()
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/KrishnaChandanam/e2e-testing-playwrightMCP.git']]])
             }
         }
         
         stage('Build Docker Image') {
             steps {
                 echo '========== Building Docker image =========='
-                script {
-                    sh 'docker build -t intersport-tests:${BUILD_NUMBER} .'
-                    sh 'docker tag intersport-tests:${BUILD_NUMBER} intersport-tests:latest'
-                }
+                sh 'docker build -t intersport-tests:${BUILD_NUMBER} .'
+                sh 'docker tag intersport-tests:${BUILD_NUMBER} intersport-tests:latest'
             }
         }
         
         stage('Run Tests in Docker') {
             steps {
                 echo '========== Running Playwright tests in container =========='
-                script {
-                    sh '''
-                        docker run --rm \
-                            -v ${WORKSPACE}/test-results:/app/test-results \
-                            -v ${WORKSPACE}/playwright-report:/app/playwright-report \
-                            -e CI=true \
-                            intersport-tests:latest
-                    '''
-                }
+                sh '''
+                    docker run --rm \
+                        -v ${WORKSPACE}/test-results:/app/test-results \
+                        -v ${WORKSPACE}/playwright-report:/app/playwright-report \
+                        -e CI=true \
+                        intersport-tests:latest
+                '''
             }
         }
     }
@@ -46,7 +43,6 @@ pipeline {
             echo '========== Archiving test results =========='
             archiveArtifacts artifacts: 'test-results/**', allowEmptyArchive: true
             archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
-            
             echo '========== Test artifacts saved =========='
         }
         
