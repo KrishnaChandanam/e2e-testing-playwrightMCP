@@ -2,15 +2,15 @@ version: '3.8'
 
 services:
   jenkins:
-    image: jenkins/jenkins:lts
+    image: jenkins/jenkins:latest-jdk17
     container_name: jenkins-local
+    privileged: true
     ports:
       - "8080:8080"       # Jenkins UI
       - "50000:50000"     # Jenkins Agent communication
     volumes:
       - jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock  # Access Docker from Jenkins
-      - /usr/bin/docker:/usr/bin/docker  # Docker CLI binary
     user: root
     environment:
       - JENKINS_OPTS=--argumentsRealm.passwd.admin=admin --argumentsRealm.roles.admin=admin
