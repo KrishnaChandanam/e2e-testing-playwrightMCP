@@ -47,12 +47,7 @@ pipeline {
             archiveArtifacts artifacts: 'test-results/**', allowEmptyArchive: true
             archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
             
-            echo '========== Publishing HTML report =========='
-            publishHTML([
-                reportDir: 'playwright-report',
-                reportFiles: 'index.html',
-                reportName: 'Playwright Test Report'
-            ])
+            echo '========== Test artifacts saved =========='
         }
         
         failure {
